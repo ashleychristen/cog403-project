@@ -39,8 +39,14 @@ for language in data:
             elif data[language][item]['value'] == 5: # removing other to avoid inconsistency
                 removal.append(item)
         
-        elif item == "26A":
-            print('26A')
+        elif item == "27A":
+            if data[language][item]['value'] == 3:
+                data[language][item]['value'] = 0
+            elif data[language][item]['value'] == 2:
+                data[language][item]['value'] = 1
+            elif data[language][item]['value'] == 1:
+                data[language][item]['value'] = 2
+
 
         elif item[0].isnumeric():
             data[language][item]['value'] -= 1

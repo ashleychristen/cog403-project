@@ -13,7 +13,7 @@ MORPH_FEATURES = ['20A','21A','21B','22A','23A','24A','25A','25B',
 # print('morph features =', len(MORPH_FEATURES))
 
 
-filepath = 'feature_language_list.json'
+filepath = 'features.json'
 
 with open(filepath) as f:
     data = json.load(f)
