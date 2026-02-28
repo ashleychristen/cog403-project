@@ -19,6 +19,7 @@ n = len(languages)
 # count how many features each language has data for
 phon_pct  = []
 morph_pct = []
+total_have = []
 
 for lang in languages:
     lang_data = data[lang]
@@ -26,6 +27,7 @@ for lang in languages:
     morph_have = sum(1 for f in MORPH_FEATURES if f in lang_data)
     phon_pct.append(phon_have  / len(PHON_FEATURES))
     morph_pct.append(morph_have / len(MORPH_FEATURES))
+    total_have.append(phon_have + morph_have)
 
 # saves 'usable' languages which are those that have data for at least 50% of features 
 # (doesn't necessarily need to be 50% but this could be a good starting point. If we are harsher
@@ -93,3 +95,9 @@ ax2.set_xticks([])
 plt.tight_layout()
 plt.show()
 
+
+plt.hist(total_have)
+plt.title('Number of Languages with Feature Counts')
+plt.xlabel("Number of Features")
+plt.ylabel("Number of Languages")
+plt.show()
