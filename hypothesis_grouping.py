@@ -92,25 +92,23 @@ ax.set_ylabel("Phonological complexity")
 
 # families, pearson
 ax = axes[1,0]
-ax.scatter(ms_fam, ps_fam, color='blue', alpha=0.7)
+ax.scatter(ms_fam, ps_fam, color='blue', alpha=0.5)
 coef = np.polyfit(ms_fam, ps_fam, 1)
 xs = np.linspace(min(ms_fam), max(ms_fam), 100)
 ax.plot(xs, np.polyval(coef, xs), color='red', linewidth=2)
-sig = "p<0.05*" if pearson_p_fam < 0.05 else "n.s."
-ax.set_title(f"Pearson (By family)\nr={pearson_r_fam:+.3f}, p={pearson_p_fam:.3f} ({sig})")
+
+ax.set_title("Pearon (by family)")
 ax.set_xlabel("Morphological complexity")
 ax.set_ylabel("Phonological complexity")
 
 #plot 4: families, spearman
 ax = axes[1,1]
-ax.scatter(ms_fam, ps_fam, color='green', alpha=0.7)
+ax.scatter(ms_fam, ps_fam, color='green', alpha=0.5)
 coef = np.polyfit(ms_fam, ps_fam, 1)
 xs = np.linspace(min(ms_fam), max(ms_fam), 100)
 ax.plot(xs, np.polyval(coef, xs), color='red', linewidth=2)
-sig = "p<0.05*" if spearman_p_fam < 0.05 else "n.s."
 ax.set_title("Spearman (by family)")
 ax.set_xlabel("Morphological complexity")
 ax.set_ylabel("Phonological complexity")
-
-plt.tight_layout()
+plt.tight_layout(pad=3.0) 
 plt.show()
