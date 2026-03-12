@@ -1,116 +1,63 @@
+import os
+import csv
 import json
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.stats import spearmanr, pearsonr
-from collections import defaultdict
+import pandas as pd
 
-with open("organized_info.json", "r") as f:
-    raw_data = json.load(f)
+bad = ".DS_Store"
+directory = "datasets"
+all_info = {}
+by_feature = {}
 
-PHON_ORIG  = ['2A', '3A', '4A', '6A', '7A', '8A', '11A']
-MORPH_ORIG = ['20A', '21A', '21B', '22A', '23A', '25B', '26A']
+file_list = ['1A.tsv', '2A.tsv', '3A.tsv', '4A.tsv', '5A.tsv', '6A.tsv', '7A.tsv', '8A.tsv', '9A.tsv', '10A.tsv', '10B.tsv', '11A.tsv', '12A.tsv', '13A.tsv', '14A.tsv', '15A.tsv', '16A.tsv', '17A.tsv', '18A.tsv', '19A.tsv', '20A.tsv', '21A.tsv', '21B.tsv', '22A.tsv', '23A.tsv', '24A.tsv', '25A.tsv', '25B.tsv', '26A.tsv', '27A.tsv', '28A.tsv', '29A.tsv']
 
-# ── Compute phonological and morphological scores ────────────
-def compute_scores(data, phon_feats, morph_feats, require_all=True):
-    phon_scores, morph_scores, families = [], [], []
-    for lang_code, lang in data.items():
-        if require_all and not (set(phon_feats) | set(morph_feats)).issubset(lang.keys()):
-            continue
+for file in file_list:
+    path = f"{directory}/{file}"
+    print(file)
 
-        p_sum = sum(lang[f]['value'] for f in phon_feats if f in lang and 'value' in lang[f])
-        m_sum = sum(lang[f]['value'] for f in morph_feats if f in lang and 'value' in lang[f])
+    data_name = file[:file.find('.')]
 
-        if p_sum == 0 or m_sum == 0:
-            continue
+    by_feature[data_name] = []
 
-        phon_scores.append(p_sum)
-        morph_scores.append(m_sum)
-        families.append(lang.get('family', 'Unknown'))
+    data = pd.read_csv(path, sep='\t')
+    data = data.to_dict('index')
+    for index in data:
+        info = data[index]
+        code = info['wals code']
 
-    return phon_scores, morph_scores, families
+        by_feature[data_name].append(code)
 
-# ── Aggregate by family ──────────────────────────────────────
-def aggregate_by_family(phon_scores, morph_scores, families):
-    family_dict = defaultdict(lambda: {'phon': [], 'morph': []})
-    for p, m, f in zip(phon_scores, morph_scores, families):
-        family_dict[f]['phon'].append(p)
-        family_dict[f]['morph'].append(m)
+        name = info['name']
+        value = info['value']
+        description = info['description']
+        if type(description) != str:
+            description = "Nan"
+        lat = info['latitude']
+        long = info['longitude']
+        genus = info['genus']
+        family = info['family']
+        area = info['area']
 
-    phon_avg, morph_avg = [], []
-    family_names = []
-    for f, vals in family_dict.items():
-        phon_avg.append(np.mean(vals['phon']))
-        morph_avg.append(np.mean(vals['morph']))
-        family_names.append(f)
-    return phon_avg, morph_avg, family_names
+        if code not in all_info:
+            all_info[code] = {}
+            all_info[code]['language_name'] = name
+            all_info[code]['latitude'] = lat
+            all_info[code]['longitude'] = long
+            all_info[code]['genus'] = genus
+            all_info[code]['family'] = family
+        
+        all_info[code][data_name] = {}
+        all_info[code][data_name]['value'] = value
+        all_info[code][data_name]['description'] = description
 
-# scores (individual)
-ps, ms, fams = compute_scores(raw_data, PHON_ORIG, MORPH_ORIG)
+print(by_feature)
 
-# correlations for individual languages
-pearson_r, pearson_p = pearsonr(ms, ps)
-spearman_r, spearman_p = spearmanr(ms, ps)
+with open('organized_info.json', 'w') as f:
+    json.dump(all_info, f)
 
-print("individual langs")
-print(f"languages: {len(ps)}")
-print(f"Pearson: r={pearson_r:+.4f}, p={pearson_p:.4f}")
-print(f"spearman: rho={spearman_r:+.4f}, p={spearman_p:.4f}")
+data = pd.DataFrame(all_info)
+data = data.transpose()
 
-#aggregate scores with familiws
-ps_fam, ms_fam, fam_names = aggregate_by_family(ps, ms, fams)
+with open('feature_language_list.json', 'w') as f:
+    json.dump(by_feature, f)
 
-pearson_r_fam, pearson_p_fam = pearsonr(ms_fam, ps_fam)
-spearman_r_fam, spearman_p_fam = spearmanr(ms_fam, ps_fam)
-
-print("by family")
-print(f"Families: {len(fam_names)}")
-print(f"Pearson: r={pearson_r_fam:+.4f}, p={pearson_p_fam:.4f}")
-print(f"Spearman: rho={spearman_r_fam:+.4f}, p={spearman_p_fam:.4f}")
-
-# plots
-fig, axes = plt.subplots(2, 2, figsize=(14, 10))
-
-# individual langs, pearson
-ax = axes[0,0]
-ax.scatter(ms, ps, color='blue', alpha=0.5)
-coef = np.polyfit(ms, ps, 1)
-xs = np.linspace(min(ms), max(ms), 100)
-ax.plot(xs, np.polyval(coef, xs), color='red', linewidth=2)
-ax.set_xlabel("Morphological complexity")
-ax.set_ylabel("Phonological complexity")
-ax.set_title("Pearson (individual langs)")
-
-#individual langs spearman
-ax = axes[0,1]
-ax.scatter(ms, ps, color='green', alpha=0.5)
-coef = np.polyfit(ms, ps, 1)
-xs = np.linspace(min(ms), max(ms), 100)
-ax.plot(xs, np.polyval(coef, xs), color='red', linewidth=2)
-ax.set_title("spearman (individual langs)")
-ax.set_xlabel("Morphological complexity")
-ax.set_ylabel("Phonological complexity")
-
-# families, pearson
-ax = axes[1,0]
-ax.scatter(ms_fam, ps_fam, color='blue', alpha=0.7)
-coef = np.polyfit(ms_fam, ps_fam, 1)
-xs = np.linspace(min(ms_fam), max(ms_fam), 100)
-ax.plot(xs, np.polyval(coef, xs), color='red', linewidth=2)
-sig = "p<0.05*" if pearson_p_fam < 0.05 else "n.s."
-ax.set_title(f"Pearson (By family)\nr={pearson_r_fam:+.3f}, p={pearson_p_fam:.3f} ({sig})")
-ax.set_xlabel("Morphological complexity")
-ax.set_ylabel("Phonological complexity")
-
-#plot 4: families, spearman
-ax = axes[1,1]
-ax.scatter(ms_fam, ps_fam, color='green', alpha=0.7)
-coef = np.polyfit(ms_fam, ps_fam, 1)
-xs = np.linspace(min(ms_fam), max(ms_fam), 100)
-ax.plot(xs, np.polyval(coef, xs), color='red', linewidth=2)
-sig = "p<0.05*" if spearman_p_fam < 0.05 else "n.s."
-ax.set_title("Spearman (by family)")
-ax.set_xlabel("Morphological complexity")
-ax.set_ylabel("Phonological complexity")
-
-plt.tight_layout()
-plt.show()
+data.to_csv('organized_info.csv')
