@@ -12,7 +12,7 @@ def pearsonown(a,b):
     
     return corr
 
-with open('organized_info.json', 'r') as f:
+with open('modified_info_standardized.json', 'r') as f:
     data = json.load(f)
 
 

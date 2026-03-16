@@ -4,6 +4,8 @@
 __pycache__/
 *.py[codz]
 *$py.class
+pearson_significant
+spearman_significant
 
 # C extensions
 *.so

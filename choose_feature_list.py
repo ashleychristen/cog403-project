@@ -5,9 +5,9 @@ import itertools
 
 PHON_FEATURES = ['1A','2A','3A','4A','6A','7A','8A','9A',
                  '10A','11A','12A','13A','14A','15A','16A',
-                 '17A','18A','19A']
+                 '17A','19A']
 
-MORPH_FEATURES = ['20A','21A','21B','22A','23A','24A','25A','25B',
+MORPH_FEATURES = ['20A','21A','21B','22A','23A','24A','25B',
                   '26A','27A','28A','29A']
 
 def calculate_significance(phon_features, morph_features, language_data, languages):
@@ -39,7 +39,7 @@ def calculate_significance(phon_features, morph_features, language_data, languag
 
 
 def main():
-    filename = "modified_info.json"
+    filename = "modified_info_standardized.json"
 
     with open(filename, 'r') as f:
         data = json.load(f)
