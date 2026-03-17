@@ -90,7 +90,7 @@ long = df['latitude']
 lat = df['longitude']
 
 
-independent_var = [all_morph, long, lat]
+independent_var = df[['morph_score', 'latitude', 'longitude']]
 dependent_var = all_phon
 
 X = sm.add_constant(independent_var)
