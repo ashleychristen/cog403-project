@@ -342,7 +342,7 @@ for language in data:
 
             elif value == 3:
                 value = 2
-
+        data[language][item]['value'] = value
     for feat in removal:
         data[language].pop(feat)
 
