@@ -14,7 +14,7 @@ SECTIONS = {
                   '26A','27A','28A','29A']
 }
 
-SECT = 'phonological'
+SECT = 'morphological'
 
 def main():
     with open('modified_info_standardized.json', 'r') as f:

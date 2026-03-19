@@ -22,7 +22,12 @@ with open('modified_info_standardized.json', 'r') as f:
 
 scores = {}
 
-both = ('4A', '26A')
+both = ('1A', '2A', '3A', '4A', '6A', '7A', '8A', '9A', '11A', '13A', '19A', '20A', '21A', '21B', '22A', '23A', '24A', '25B', '26A', '27A', '28A', '29A')
+
+
+
+
+
 
 
 phon = []
@@ -34,7 +39,7 @@ for feat in both:
     else:
         morph.append(feat)
 
-
+# determine which languages have values for the selected features
 chosen_languages = []
 for language in data:
 
@@ -49,7 +54,7 @@ for language in data:
 
         chosen_languages.append(language)
 
-# print(len(chosen_languages))
+# determine scores for languages that have all of the selected features
 for lang in chosen_languages:
     if lang not in scores:
         scores[lang] = {}
@@ -70,20 +75,11 @@ for lang in chosen_languages:
             scores[lang]['longitude'] = data[lang][feat]
 
 
-# for lang in scores:
-#     all_phon.append(scores[lang]['phon_score'])
-#     all_morph.append(scores[lang]['morph_score'])
-#     all_total.append(scores[lang]['total_score'])
-#     long.append(scores[lang]['longitude'])
-#     lat.append(scores[lang]['latitude'])
-
+# create dataframe from information to prepare for multiple linear regression
 
 df = pd.DataFrame(scores)
 df = df.T
 # print(df)
-
-slope, intercept, r, p, se = linregress(df['morph_score'], df['phon_score'])
-
 
 all_phon = df['phon_score']
 all_morph = df['morph_score']
@@ -102,16 +98,29 @@ results = model.fit()
 
 print(f'feature list: {both}')
 print(f'number of languages: {len(chosen_languages)}')
+
+# calculate statistical analyses 
+
 print('pearson')
 pearson = pearsonr(all_morph, all_phon)
 print(pearson)
 print('spearman')
 spearman = spearmanr(all_morph, all_phon)
 print(spearman)
+
+slope, intercept, r, p, se = linregress(df['morph_score'], df['phon_score'])
 print(f'slope: {slope}')
+
 # print('multiple linear regression')
 plt.scatter(all_morph, all_phon, alpha=0.5)
 plt.plot(df['morph_score'], intercept + slope * df['morph_score'], color='#097969')
+
+# plot diagnonal null hypothesis line
+# mn = 0
+# mx = len(phon)
+# plt.plot([mn, mx], [mn, mx], linestyle='--', color='gray')
+
+
 plt.title(f"Morphology vs. Phonology Complexity ({len(both) / 2} features each)")
 plt.xlabel("Morphology Complexity")
 plt.ylabel("Phonology Complexity")
