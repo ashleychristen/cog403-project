@@ -1,7 +1,7 @@
 import json
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import spearmanr, pearsonr
+from scipy.stats import spearmanr, pearsonr so in the end, there should be a scatterplot for the first one (dont change this graph logic), 
 from collections import defaultdict
 
 with open("organized_info.json", "r") as f:
