@@ -10,11 +10,11 @@ SECTIONS = {
                  '10A','11A','12A','13A','14A','15A','16A',
                  '17A','19A'],
 
-    'morphological': ['20A','21A','21B','22A','23A','24A',
+    'morphological': ['20A','21A','21B','22A','23A','24A', '25B',
                   '26A','27A','28A','29A']
 }
 
-SECT = 'morphological'
+SECT = 'phonological'
 
 def main():
     with open('modified_info_standardized.json', 'r') as f:

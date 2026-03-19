@@ -7,6 +7,7 @@ bad = ".DS_Store"
 directory = "datasets"
 all_info = {}
 by_feature = {}
+download = []
 
 file_list = ['1A.tsv', '2A.tsv', '3A.tsv', '4A.tsv', '5A.tsv', '6A.tsv', '7A.tsv', '8A.tsv', '9A.tsv', '10A.tsv', '10B.tsv', '11A.tsv', '12A.tsv', '13A.tsv', '14A.tsv', '15A.tsv', '16A.tsv', '17A.tsv', '18A.tsv', '19A.tsv', '20A.tsv', '21A.tsv', '21B.tsv', '22A.tsv', '23A.tsv', '24A.tsv', '25A.tsv', '25B.tsv', '26A.tsv', '27A.tsv', '28A.tsv', '29A.tsv']
 
@@ -38,6 +39,8 @@ for file in file_list:
         area = info['area']
 
         if code not in all_info:
+            if file != '1A.tsv':
+                download.append(file)
             all_info[code] = {}
             all_info[code]['language_name'] = name
             all_info[code]['latitude'] = lat
@@ -49,7 +52,9 @@ for file in file_list:
         all_info[code][data_name]['value'] = value
         all_info[code][data_name]['description'] = description
 
-print(by_feature)
+# print(by_feature)
+
+print(set(download))
 
 with open('organized_info.json', 'w') as f:
     json.dump(all_info, f)

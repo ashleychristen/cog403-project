@@ -12,7 +12,7 @@ PHON_FEATURES = ['1A','2A','3A','4A','6A','7A','8A','9A',
                  '10A','11A','12A','13A','14A','15A','16A',
                  '17A','19A']
 
-MORPH_FEATURES = ['20A','21A','21B','22A','23A','24A',
+MORPH_FEATURES = ['20A','21A','21B','22A','23A','24A', '25B',
                   '26A','27A','28A','29A']
 
 with open('modified_info_standardized.json', 'r') as f:
@@ -22,7 +22,8 @@ with open('modified_info_standardized.json', 'r') as f:
 
 scores = {}
 
-both = ('1A', '2A', '3A', '7A', '9A', '10A', '11A', '12A', '14A', '15A', '20A', '21A', '21B', '22A', '23A', '24A', '25B', '26A', '27A', '28A')
+both = ('4A', '26A')
+
 
 phon = []
 morph = []
@@ -96,7 +97,7 @@ dependent_var = all_phon
 X = sm.add_constant(independent_var)
 model = sm.OLS(dependent_var, X)
 results = model.fit()
-print(results.summary())
+# print(results.summary())
 
 
 print(f'feature list: {both}')
@@ -107,8 +108,7 @@ print(pearson)
 print('spearman')
 spearman = spearmanr(all_morph, all_phon)
 print(spearman)
-print('slope')
-print(slope)
+print(f'slope: {slope}')
 # print('multiple linear regression')
 plt.scatter(all_morph, all_phon, alpha=0.5)
 plt.plot(df['morph_score'], intercept + slope * df['morph_score'], color='#097969')
