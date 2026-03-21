@@ -22,7 +22,11 @@ with open('cleaned_data/modified_info_standardized.json', 'r') as f:
 
 scores = {}
 
-both = ('13A', '23A')
+both = ('1A', '3A', '4A', '6A', '7A', '8A', '9A', '11A', '13A', '14A', '16A', '20A', '21A', '21B', '22A', '23A', '24A', '25B', '26A', '27A', '28A', '29A')
+
+
+
+
 
 phon = []
 morph = []
@@ -87,7 +91,7 @@ dependent_var = all_phon
 X = sm.add_constant(independent_var)
 model = sm.OLS(dependent_var, X)
 results = model.fit()
-# print(results.summary())
+print(results.summary())
 
 
 print(f'feature list: {both}')
@@ -118,7 +122,7 @@ plt.plot(df['morph_score'], intercept + slope * df['morph_score'], color='#09796
 plt.title(f"Morphology vs. Phonology Complexity ({len(both) / 2} features each)")
 plt.xlabel("Morphology Complexity")
 plt.ylabel("Phonology Complexity")
-plt.save(f"graphs/optimized_correlation/scatter_plot_{len(both)/2}.png")
+plt.savefig(f"graphs/optimized_correlation/scatter_plot_{len(both)/2}.png")
 
 
 
