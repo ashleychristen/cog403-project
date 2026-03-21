@@ -15,6 +15,9 @@ PHON_AND_MORPH_THRES = 7
 lang_codes = list(data.keys())
 
 def score_pair(lang1, lang2, features):
+    """
+        unused function 
+    """
     shared_count = 0
     similar_count = 0
     for feat in features:
