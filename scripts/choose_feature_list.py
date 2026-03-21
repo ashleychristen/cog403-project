@@ -4,7 +4,7 @@ from scipy.stats import pearsonr
 import itertools
 
 PHON_FEATURES = ['1A','2A','3A','4A','6A','7A','8A','9A',
-                 '10A','11A','12A','13A','14A','15A','16A',
+                 '10A','11A','12A','13A','14A','16A',
                  '17A','19A']
 
 MORPH_FEATURES = ['20A','21A','21B','22A','23A','24A','25B',
@@ -39,18 +39,18 @@ def calculate_significance(phon_features, morph_features, language_data, languag
 
 
 def main():
-    filename = "modified_info_standardized.json"
+    filename = "cleaned_data/modified_info_standardized.json"
 
     with open(filename, 'r') as f:
         data = json.load(f)
 
     
-    filename = "modified_feature_list.json"
+    filename = "cleaned_data/modified_feature_list.json"
     with open(filename, 'r') as f:
         feature_data = json.load(f)
 
 
-    num_of_feats = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    num_of_feats = [7, 8, 9, 10, 11, 12]
 
     for n in num_of_feats:
         print(f'num of feats: {n}')
