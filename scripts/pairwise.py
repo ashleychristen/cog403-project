@@ -38,10 +38,10 @@ for code1, code2 in combinations(lang_codes, 2):
     if len(phon_shared) < PHON_AND_MORPH_THRES or len(morph_shared) < PHON_AND_MORPH_THRES:
         continue
 
-    phon1 = sum(data[code1][f]['value'] for f in phon_shared) / len(phon_shared)
-    phon2 = sum(data[code2][f]['value'] for f in phon_shared) / len(phon_shared)
-    morph1 = sum(data[code1][f]['value'] for f in morph_shared) / len(morph_shared)
-    morph2 = sum(data[code2][f]['value'] for f in morph_shared) / len(morph_shared)
+    phon1 = sum(data[code1][f]['value'] for f in phon_shared)
+    phon2 = sum(data[code2][f]['value'] for f in phon_shared) 
+    morph1 = sum(data[code1][f]['value'] for f in morph_shared)
+    morph2 = sum(data[code2][f]['value'] for f in morph_shared) 
 
     supports = False
     if (phon1 > morph1 and morph2 > phon2) or (morph1 > phon1 and phon2 > morph2):
