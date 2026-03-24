@@ -7,26 +7,13 @@ from scipy.stats import binomtest, linregress
 with open('cleaned_data/modified_info_standardized.json', 'r') as f:
     data = json.load(f)
 
-PHON  = ('2A', '9A', '11A', '13A', '15A', '16A', '17A')
-MORPH = ( '20A', '22A', '23A', '25B', '26A', '27A', '29A')
+PHON  = ('2A', '3A', '4A', '6A', '7A', '8A', '11A')
+MORPH = ('20A', '21A', '21B', '22A', '23A', '25B', '26A')
 SIMILARITY_THRESHOLD = 0.05
 PHON_AND_MORPH_THRES = 7
 
 lang_codes = list(data.keys())
 
-def score_pair(lang1, lang2, features):
-    """
-        unused function 
-    """
-    shared_count = 0
-    similar_count = 0
-    for feat in features:
-        if feat in lang1 and feat in lang2:
-            shared_count += 1
-            diff = abs(lang1[feat]['value'] - lang2[feat]['value'])
-            if diff <= SIMILARITY_THRESHOLD:
-                similar_count += 1
-    return shared_count, similar_count 
 pair_results = []
 
 for code1, code2 in combinations(lang_codes, 2):
@@ -65,6 +52,7 @@ print("total pairs:", total_pairs)
 print("supporting:", supporting_count, "/", total_pairs, "({:.3f})".format(supporting_count/total_pairs))
 print("p-value:", pval)
 print("threshold:", PHON_AND_MORPH_THRES)
+
 
 lang_phon = {}
 lang_morph = {}
@@ -108,15 +96,22 @@ for i in range(201):
     x_line.append(x)
     y_line.append(slope * x + intercept)
 
+print("\nRegression stats:")
+
+print(f"r (correlation): {r:.4f}")
+print(f"r squared: {r**2:.4f}")
+print(f"p-value: {p_reg:.6f}")
+print(f"n of families: {len(morph_scores)}")
+
 #fig 1:plotting familiex
 fig1, ax1 = plt.subplots()
-ax1.scatter(morph_scores, phon_scores, color='blue',zorder=2)
+ax1.scatter(morph_scores, phon_scores, color='royalblue',zorder=2)
 
 for i in range(len(fam_names)):
     # for fam names
     ax1.annotate(fam_names[i], (morph_scores[i], phon_scores[i]),
                  ha='left', va='bottom',
-                 xytext=(3, 2),textcoords='offset points', color='black',fontsize=4 )
+                 xytext=(3, 2),textcoords='offset points', color='black',fontsize=6 )
 
 ax1.plot([min_val, max_val], [min_val, max_val], linestyle='--', color='gray', label='Null: phon = morph')
 ax1.plot(x_line, y_line, color='red', label=f'Regression (r={r:.2f}, p={p_reg:.3f})')
@@ -129,44 +124,5 @@ ax1.legend( loc='upper right')
 fig1.subplots_adjust(right=0.72)
 
 
-
-# # fig 2, all pairs
-# fig2, ax2 = plt.subplots(figsize=(8, 7))
-# ax2.set_facecolor('white')
-
-# colours_support = ["red" if p[6] else "gray" for p in pair_results]
-# x_vals = [p[3] for p in pair_results]
-# y_vals = [p[2] for p in pair_results]
-# ax2.scatter(x_vals, y_vals, c=colours_support, s=8, alpha=0.4)
-
-# mn2 = min(x_vals + y_vals)
-# mx2 = max(x_vals + y_vals)
-# ax2.plot([mn2, mx2], [mn2, mx2], linestyle='--', color='gray')
-
-# slope2, intercept2, r2, p_reg2, stderr = linregress(x_vals, y_vals)
-# x_line2 = [mn2, mx2]
-# y_line2 = [slope2 * mn2 + intercept2, slope2 * mx2 + intercept2]
-# ax2.plot(x_line2, y_line2, color='blue')
-# ax2.set_xlabel('Morphology score (1st language)')
-# ax2.set_ylabel('Phonology score (1st language)')
-# ax2.set_title(f'All pairs for language 1\nRed = supports tradeoff ({supporting_count}/{total_pairs})')
- 
-# handles2 = [
-#     mpatches.Patch(color='red'),
-#     mpatches.Patch(color='gray'),
-#     plt.Line2D([0], [0], linestyle='--', color='gray'),
-#     plt.Line2D([0], [0], color='blue')
-# ]
-# labels2 = [
-#     f'Supports ({supporting_count}/{total_pairs})',
-#     'Does not support hypothesis',
-#     'Null: phon = morph',
-#     f'Regression (r={r2:.2f}, p={p_reg2:.3f})'
-# ]
-# ax2.legend(handles=handles2, labels=labels2,
-#            bbox_to_anchor=(1.01, 1), loc='upper left',
-#            borderaxespad=0, fontsize=7)
- 
-# fig2.subplots_adjust(right=0.72)
 
 plt.show()
