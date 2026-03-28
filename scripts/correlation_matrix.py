@@ -14,12 +14,15 @@ MORPH_FEATURES = ['20A','21A','21B','22A','23A','24A','25B'
 
 
 def main():
-    with open('modified_info_standardized.json', 'r') as f:
+    with open('cleaned_data/modified_info_standardized.json', 'r') as f:
         data = json.load(f)
 
     language = {}
     
-
+    lat = []
+    long = []
+    morph = []
+    phon = []
     for lang in data:
         language[lang] = {}
         language[lang]['morph_score'] = 0
@@ -35,6 +38,14 @@ def main():
                 language[lang]['latitude'] = data[lang][feat]
             elif feat == "longitude":
                 language[lang]['longitude'] = data[lang][feat]
+
+        lat.append(language[lang]['latitude'])
+        long.append(language[lang]['longitude'])
+        morph.append(language[lang]['morph_score'])
+        phon.append(language[lang]['phon_score'])
+    
+    full = {"lat": lat, 'long': long, 'morph': morph, 'phon': phon}
+    
     
     
     df = pd.DataFrame(language)

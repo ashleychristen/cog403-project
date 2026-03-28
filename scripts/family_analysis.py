@@ -7,8 +7,8 @@ from scipy.stats import pearsonr, binomtest
 with open('cleaned_data/modified_info_standardized.json', 'r') as f:
     data = json.load(f)
 
-PHON  = ('2A', '13A')
-MORPH = ( '23A', '25B')
+PHON  = ('2A', '9A', '11A', '13A', '16A', '17A', '19A')
+MORPH = ('20A', '22A', '23A', '25B', '26A', '27A', '29A')
 
 PHON_AND_MORPH_THRES = 2  #minimum shared features
 
@@ -68,6 +68,7 @@ def plot_violin_box(ax, corrs, colour, label, binom_p):
         pc.set_zorder(1)
 
     #boxplot inside the violin
+    
     bp = ax.boxplot(corrs, positions=[1], widths=0.06,
                     patch_artist=True, showfliers=False,
                     medianprops=dict(color='black', linewidth=2.5, zorder=5),
@@ -93,12 +94,17 @@ def plot_violin_box(ax, corrs, colour, label, binom_p):
     )
     ax.legend(fontsize=8, loc='upper right')
 
-fig1, ax1 = plt.subplots(figsize=(5, 7))
-plot_violin_box(ax1, within_corrs, 'palegreen', 'Within-family', w_p)
 
-plt.tight_layout()
 
-fig2, ax2 = plt.subplots(figsize=(5, 7))
-plot_violin_box(ax2, across_corrs, 'royalblue', 'Across-family', a_p)
-plt.tight_layout()
+# fig1, ax1 = plt.subplots(figsize=(5, 7))
+# plot_violin_box(ax1, within_corrs, 'palegreen', 'Within-family', w_p)
+
+# plt.tight_layout()
+
+# fig2, ax2 = plt.subplots(figsize=(5, 7))
+# plot_violin_box(ax2, across_corrs, 'royalblue', 'Across-family', a_p)
+# plt.tight_layout()
+
+plt.violinplot([within_corrs, across_corrs])
+plt.boxplot([within_corrs, across_corrs])
 plt.show()
