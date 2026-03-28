@@ -46,7 +46,17 @@ def main():
     
     full = {"lat": lat, 'long': long, 'morph': morph, 'phon': phon}
     
-    
+    for x in full:
+        for y in full:
+            if x != y:
+                d1 = full[x]
+                d2 = full[y]
+                res = stats.pearsonr(d1, d2)
+
+                if res[1] < 0.05:
+                    print('\n')
+                    print(x, y)
+                    print(res)
     
     df = pd.DataFrame(language)
     df = df.T

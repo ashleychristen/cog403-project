@@ -4,13 +4,30 @@ import matplotlib.pyplot as plt
 from itertools import combinations
 from scipy.stats import pearsonr, binomtest
 
+PHON_FEATURES = ['1A','2A','3A','4A','6A','7A','8A','9A',
+                 '10A','11A','12A','13A','14A','15A','16A',
+                 '17A','19A']
+
+MORPH_FEATURES = ['20A','21A','21B','22A','23A','24A', '25B',
+                  '26A','27A','28A','29A']
+
 with open('cleaned_data/modified_info_standardized.json', 'r') as f:
     data = json.load(f)
 
-PHON  = ('2A', '9A', '11A', '13A', '16A', '17A', '19A')
-MORPH = ('20A', '22A', '23A', '25B', '26A', '27A', '29A')
+both = ('2A', '13A', '23A', '25B')
 
-PHON_AND_MORPH_THRES = 2  #minimum shared features
+
+
+PHON = []
+MORPH = []
+
+for feat in both:
+    if feat in PHON_FEATURES:
+        PHON.append(feat)
+    else:
+        MORPH.append(feat)
+
+PHON_AND_MORPH_THRES = len(PHON)  #minimum shared features
 
 lang_codes = list(data.keys())
 
@@ -105,6 +122,8 @@ def plot_violin_box(ax, corrs, colour, label, binom_p):
 # plot_violin_box(ax2, across_corrs, 'royalblue', 'Across-family', a_p)
 # plt.tight_layout()
 
-plt.violinplot([within_corrs, across_corrs])
-plt.boxplot([within_corrs, across_corrs])
+fig, ax = plt.subplots(figsize=(5, 7))
+ax.violinplot([within_corrs, across_corrs])
+ax.boxplot([within_corrs, across_corrs])
+ax.set_ylim(-1.15, 1.15)
 plt.show()

@@ -17,7 +17,7 @@ SECTIONS = {
 SECT = 'morphological'
 
 def main():
-    with open('modified_info_standardized.json', 'r') as f:
+    with open('cleaned_data/modified_info_standardized.json', 'r') as f:
         data = json.load(f)
 
     chosen_languages = []
@@ -36,14 +36,29 @@ def main():
 
 
     language = {}
-
+    full = {}
     for lang in data:
         if lang in chosen_languages:
             language[lang] = {}
             for feat in data[lang]:
                 if feat in SECTIONS[SECT]:
+                    if feat not in full:
+                        full[feat] = []
                     language[lang][feat] = data[lang][feat]['value']
+                    full[feat].append(data[lang][feat]['value'])
     
+
+    for x in full:
+        for y in full:
+            if x != y:
+                d1 = full[x]
+                d2 = full[y]
+                res = stats.pearsonr(d1, d2)
+
+                if res[1] < 0.05:
+                    print('\n')
+                    print(x, y)
+                    print(res)
     
     df = pd.DataFrame(language)
     df = df.T
