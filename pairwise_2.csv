@@ -1,0 +1,23 @@
+fam_names,morph_scores,phon_scores
+Sepik,1.5,0.5
+Trans-New Guinea,1.3571428571428572,0.8571428571428571
+Afro-Asiatic,1.4166666666666667,0.9166666666666666
+Pama-Nyungan,1.5,0.0
+Central Sudanic,1.25,2.0
+Dravidian,1.5,0.5
+Sino-Tibetan,1.5,1.5
+Austronesian,1.4444444444444444,0.3888888888888889
+Algic,1.5,0.25
+Indo-European,1.6666666666666667,0.6666666666666666
+Altaic,1.5,0.8333333333333334
+Niger-Congo,1.125,1.4375
+Uralic,1.6666666666666667,0.8333333333333334
+Eastern Sudanic,1.5,1.3333333333333333
+Chibchan,1.5,0.5
+Nakh-Daghestanian,1.75,0.5
+Hokan,1.75,0.75
+Penutian,2.0,0.5
+Oto-Manguean,1.25,1.5
+Austro-Asiatic,1.1666666666666667,1.1666666666666667
+Gunwinyguan,2.0,0.25
+Na-Dene,1.5,0.75

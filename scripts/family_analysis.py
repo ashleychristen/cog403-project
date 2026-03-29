@@ -14,7 +14,8 @@ MORPH_FEATURES = ['20A','21A','21B','22A','23A','24A', '25B',
 with open('cleaned_data/modified_info_standardized.json', 'r') as f:
     data = json.load(f)
 
-both = ('2A', '13A', '23A', '25B')
+both = ('1A', '3A', '4A', '6A', '7A', '8A', '9A', '11A', '13A', '14A', '16A', '20A', '21A', '21B', '22A', '23A', '24A', '25B', '26A', '27A', '28A', '29A')
+
 
 
 

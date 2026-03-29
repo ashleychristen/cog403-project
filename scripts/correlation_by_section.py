@@ -14,7 +14,7 @@ SECTIONS = {
                   '26A','27A','28A','29A']
 }
 
-SECT = 'morphological'
+SECT = 'phonological'
 
 def main():
     with open('cleaned_data/modified_info_standardized.json', 'r') as f:
@@ -47,7 +47,7 @@ def main():
                     language[lang][feat] = data[lang][feat]['value']
                     full[feat].append(data[lang][feat]['value'])
     
-
+    count = 0
     for x in full:
         for y in full:
             if x != y:
@@ -56,17 +56,16 @@ def main():
                 res = stats.pearsonr(d1, d2)
 
                 if res[1] < 0.05:
-                    print('\n')
+                    count += 1
                     print(x, y)
-                    print(res)
-    
+    print(count)
     df = pd.DataFrame(language)
     df = df.T
 
     print(f'num of languages: {len(chosen_languages)}')
     corr_matrix = df.corr()
     plt.figure(figsize=(10, 8))
-    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1)
+    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1, fmt=".2f")
     plt.title(f'Correlation Matrix - {SECT} features')
     plt.show()
 

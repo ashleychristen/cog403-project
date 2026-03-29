@@ -63,7 +63,7 @@ def main():
 
     corr_matrix = df.corr()
     plt.figure(figsize=(10, 8))
-    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1)
+    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1, fmt=".2f")
     plt.title(f'Correlation Matrix')
     plt.show()
 
