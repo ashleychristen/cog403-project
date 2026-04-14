@@ -102,9 +102,9 @@ print(f'number of languages: {len(chosen_languages)}')
 print('pearson')
 pearson = pearsonr(all_morph, all_phon)
 print(pearson)
-print('spearman')
-spearman = spearmanr(all_morph, all_phon)
-print(spearman)
+# print('spearman')
+# spearman = spearmanr(all_morph, all_phon)
+# print(spearman)
 
 slope, intercept, r, p, se = linregress(df['morph_score'], df['phon_score'])
 print(f'slope: {slope}')
@@ -123,6 +123,6 @@ plt.title(f"Morphology vs. Phonology Complexity ({len(both) / 2} features each)"
 plt.xlabel("Morphology Complexity")
 plt.ylabel("Phonology Complexity")
 plt.savefig(f"graphs/optimized_correlation/scatter_plot_{len(both)/2}.png")
-plt.show()
+# plt.show()
 
 
